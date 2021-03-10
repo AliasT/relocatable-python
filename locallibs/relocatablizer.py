@@ -20,6 +20,7 @@ from __future__ import print_function
 import os
 import subprocess
 import sys
+import re
 
 CHMOD = "/bin/chmod"
 OTOOL = "/usr/bin/otool"
@@ -72,9 +73,11 @@ def relativize_install_name(some_file):
     original_install_name = get_install_name(some_file)
     if original_install_name and not original_install_name.startswith("@"):
         framework_loc = framework_dir(some_file)
-        new_install_name = os.path.join(
+        print(os.path.join(
+            "@rpath", os.path.relpath(some_file, framework_loc)), 'ab')
+        new_install_name = re.sub(r'/Versions/[\d.]+/', '/', os.path.join(
             "@rpath", os.path.relpath(some_file, framework_loc)
-        )
+        ))
         cmd = [INSTALL_NAME_TOOL, "-id", new_install_name, some_file]
         run(cmd)
         return new_install_name
@@ -117,7 +120,8 @@ def add_rpath(some_file):
     rpath = (
         os.path.join(
             "@executable_path",
-            os.path.relpath(framework_loc, os.path.dirname(some_file)),
+            os.path.relpath(re.sub(r'/Versions/[\d.]+/', '/', framework_loc), re.sub(
+                r'/Versions/[\d.]+/', '/', os.path.dirname(some_file))),
         )
         + "/"
     )
@@ -175,7 +179,8 @@ def deps_contain_prefix(info_item, prefix):
         )
         > 0
     )
-    matching_install_name = info_item.get("install_name", "").startswith(prefix)
+    matching_install_name = info_item.get(
+        "install_name", "").startswith(prefix)
     return matching_dep_items or matching_install_name
 
 
