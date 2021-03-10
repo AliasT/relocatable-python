@@ -31,3 +31,13 @@ jobs:
     - name: Test with pytest
       run: |
         python make_relocatable_python_framework.py --python-version 3.7.4
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          Python.framework/Versions/3.7
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    
+    
