@@ -20,3 +20,13 @@ imageio ==  2.9.0
 pycryptodome == 3.10.1
 python-docx == 0.8.10
 selenium == 3.141.0
+# csv == 1.0 自带
+# multiprocessing ==  2.6.2.1 自带
+# os == 自带
+# sys == 自带
+# time == 自带
+# email == 自带
+# re == 自带
+# json == 自带
+# pickle == 自带
+
