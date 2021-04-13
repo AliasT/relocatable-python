@@ -8,7 +8,7 @@ opencv-python==4.2.0.32
 openpyxl==2.6.4
 pandas==0.24.2
 Pillow==7.0.0
-pygame==1.9.6
+pygame==2.0.1
 PyInstaller==3.6
 requests==2.23.0
 urllib3==1.25.8
