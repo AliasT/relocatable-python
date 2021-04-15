@@ -125,16 +125,15 @@ def fix_other_things(framework_path, short_version):
 
 def fix_broken_signatures(files_relocatablized):
     """
-    Re-sign the binaries and libraries that were relocatablized with ad-hoc
+    Re-sign the binaries and libraries that were relocatablized with ad-hoc 
     signatures to avoid them having invalid signatures and to allow them to
     run on Apple Silicon
     """
-    # CODESIGN_CMD = ["/usr/bin/codesign",
-    #                 "-s", "-", "--deep", "--force",
-    #                 "--preserve-metadata=identifier,entitlements,flags,runtime"]
-    # for pathname in files_relocatablized:
-    #     print("Re-signing %s with ad-hoc signature..."
-    #           % pathname)
-    #     cmd = CODESIGN_CMD + [pathname]
-    #     subprocess.check_call(cmd)
-    pass
+    CODESIGN_CMD = ["/usr/bin/codesign", 
+                    "-s", "-", "--deep", "--force", 
+                    "--preserve-metadata=identifier,entitlements,flags,runtime"]
+    for pathname in files_relocatablized:
+        print("Re-signing %s with ad-hoc signature..."
+              % pathname)
+        cmd = CODESIGN_CMD + [pathname]
+        subprocess.check_call(cmd)
