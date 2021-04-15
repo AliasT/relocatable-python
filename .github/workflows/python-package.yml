@@ -13,7 +13,7 @@ jobs:
     runs-on: macos-10.15
     strategy:
       matrix:
-        python-version: [2.7]
+        python-version: [2.7.16]
 
     steps:
       - uses: actions/checkout@v2
@@ -21,9 +21,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+        env:
+          APP_SIGN_ID: ${{ secrets.APP_SIGN_ID }}
       - name: build relocatable python
         run: |
-          python make_relocatable_python_framework.py --python-version 3.7.4 --pip-requirements ./requirements.txt
+          python make_relocatable_python_framework.py --python-version 3.7.9 --pip-requirements ./requirements.txt
           cp -r Python.framework/Versions/3.7 ./python
           zip python3.zip ./python -r
       - name: Release

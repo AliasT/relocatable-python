@@ -23,7 +23,7 @@ import optparse
 from locallibs import get
 from locallibs.fix import fix_broken_signatures, fix_other_things
 from locallibs.install import install_extras
-from locallibs.relocatablizer import relocatablize
+from locallibs.relocatablizer import codesign, relocatablize, analyze
 
 
 def main():
@@ -93,6 +93,8 @@ def main():
             requirements_file=options.pip_requirements,
             upgrade_pip=options.upgrade_pip,
         )
+        if options.unsign:
+            codesign(framework_path)
         if fix_other_things(framework_path, short_version):
             print()
             print("Done!")
