@@ -231,7 +231,8 @@ def analyze(some_dir):
                     data["dylibs"].append(info)
             else:
                 cmd = [FILETOOL, "-b", filepath]
-                output = subprocess.check_output(cmd).decode("utf-8", errors="ignore")
+                output = subprocess.check_output(
+                    cmd).decode("utf-8", errors="ignore")
                 if "Mach-O 64-bit executable" in output:
                     info = make_info(filepath)
                     if deps_contain_prefix(info, prefix):
@@ -240,19 +241,22 @@ def analyze(some_dir):
                     info = make_info(filepath)
                     if deps_contain_prefix(info, prefix):
                         data["dylibs"].append(info)
+                    else:
+                        print(info)
     sys.stdout.write("\n")
     return data
+
 
 def codesign(some_dir):
     framework_data = analyze(some_dir)
     files = (
-            framework_data["executables"]
-            + framework_data["dylibs"]
-            + framework_data["so_files"]
-        )
+        framework_data["executables"]
+        + framework_data["dylibs"]
+        + framework_data["so_files"]
+    )
 
-    SIGN=os.getenv('APP_SIGN_ID')
-    PLIST="./entitlements.mac.plist"
+    SIGN = os.getenv('APP_SIGN_ID')
+    PLIST = "./entitlements.mac.plist"
 
     CODESIGN_CMD = ["/usr/bin/codesign",
                     "-s", SIGN, "--deep", "--force",
