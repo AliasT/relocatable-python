@@ -243,6 +243,28 @@ def analyze(some_dir):
     sys.stdout.write("\n")
     return data
 
+def codesign(some_dir):
+    framework_data = analyze(some_dir)
+    files = (
+            framework_data["executables"]
+            + framework_data["dylibs"]
+            + framework_data["so_files"]
+        )
+
+    SIGN=os.getenv('APP_SIGN_ID')
+    PLIST="./entitlements.mac.plist"
+
+    CODESIGN_CMD = ["/usr/bin/codesign",
+                    "-s", SIGN, "--deep", "--force",
+                    "--entitlements", PLIST,
+                    "--preserve-metadata=flags,runtime"]
+    for file in files:
+        print(file)
+        print("Re-signing %s with ad-hoc signature..."
+              % file['path'])
+        cmd = CODESIGN_CMD + [file['path']]
+        subprocess.check_call(cmd)
+
 
 def relocatablize(framework_path):
     """Changes install names and rpaths inside a (Python) framework to make
